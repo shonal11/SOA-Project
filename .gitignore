@@ -1,0 +1,32 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.log
+
+# Environment variables
+.env
+
+# Docker
+*.pid
+*.tar
+*.bak
+
+# VSCode
+.vscode/
+
+# PyCharm
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Python virtual env
+venv/
+env/
+
+# Kubernetes configs
+*.yaml
+
+# Node modules (if any JS stuff)
+node_modules/
