@@ -17,7 +17,7 @@ All services communicate via REST APIs and use **Consul for service discovery**.
 
 ## 📐 Architecture Diagram
 
-![Architecture Diagram](./docs/architecture-diagram.png)
+!(./home/soa-project/Downloads)
 
 
 ---
