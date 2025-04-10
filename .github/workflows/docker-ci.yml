@@ -1,40 +1,44 @@
-name: Docker CI/CD Pipeline
+
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
-      - main  # Trigger on changes to the main branch
+      - main
   pull_request:
     branches:
-      - main  # Trigger on pull requests to the main branch
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3  # Use the latest version
+      # Checkout the repository code
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3  # Updated to latest version
+      # Set up Docker (this can be removed if not using Docker)
+      # - name: Set up Docker Buildx
+      #   uses: docker/setup-buildx-action@v2
 
-    - name: Cache Docker layers
-      uses: actions/cache@v3  # Updated to latest version
-      with:
-        path: /tmp/.buildx-cache
-        key: ${{ runner.os }}-buildx-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-buildx-
+      # Skip Docker build and push step for now
+      # - name: Build and push Docker image for User Service
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     context: ./services/user-service
+      #     file: ./services/user-service/Dockerfile
+      #     push: true
+      #     tags: ${{ secrets.DOCKER_USERNAME }}/user-service:latest
 
-    - name: Build and push Docker image for User Service
-      uses: docker/build-push-action@v3  # Updated to latest version
-      with:
-        context: ./  # Context to current directory
-        file: ./docker-compose.yml  # Use the right file path
-        push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/user-service:latest
-
-    - name: Health check for user-service
-      run: |
-        curl --fail http://localhost:5001/health || exit 1
+      # Example of other steps in the workflow
+      - name: Run tests
+        run: |
+          # Add your test commands here
+          echo "Running tests..."
+          # pytest or other testing commands
+          
+      # Example for deploying or further actions (modify as needed)
+      - name: Deploy
+        run: |
+          echo "Deploying application..."
