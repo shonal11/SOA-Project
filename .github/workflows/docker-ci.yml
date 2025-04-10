@@ -1,62 +1,49 @@
-name: Build and Push Docker Images
+name: Build and Test Services with Docker Compose
 
 on:
   push:
     branches:
       - main  # or any other branch you want to trigger on
+  pull_request:
+    branches:
+      - main  # or any other branch you want to trigger on
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
+    services:
+      docker:
+        image: docker:19.03.12
+        options: --privileged
+
     steps:
-      - name: Checkout the repository
+      # Step 1: Check out the repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      # Set up Docker Buildx
+      # Step 2: Set up Docker
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v1
 
-      # Login to DockerHub
-      - name: Log in to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+      # Step 3: Set up Docker Compose
+      - name: Set up Docker Compose
+        uses: docker/setup-qemu-action@v2
 
-      # Build and push User Service
-      - name: Build and push Docker image for User Service
-        uses: docker/build-push-action@v2
-        with:
-          context: ./services/user-service
-          file: ./services/user-service/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/user-service:latest
+      # Step 4: Build and run with Docker Compose
+      - name: Build and run with Docker Compose
+        run: |
+          docker-compose -f docker-compose.yml build
+          docker-compose up -d
 
-      # Build and push Restaurant Service
-      - name: Build and push Docker image for Restaurant Service
-        uses: docker/build-push-action@v2
-        with:
-          context: ./services/restaurant-service
-          file: ./services/restaurant-service/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/restaurant-service:latest
+      # Step 5: Run tests (if applicable)
+      # You can add steps to run tests, for example, using curl or other commands to check if services are running
 
-      # Build and push Product Service
-      - name: Build and push Docker image for Product Service
-        uses: docker/build-push-action@v2
-        with:
-          context: ./services/product-service
-          file: ./services/product-service/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/product-service:latest
+      # Example: Testing if the user-service is running
+      - name: Test user-service is up
+        run: |
+          curl --fail http://localhost:5001/health || exit 1
 
-      # Build and push Notification Service
-      - name: Build and push Docker image for Notification Service
-        uses: docker/build-push-action@v2
-        with:
-          context: ./services/notification-service
-          file: ./services/notification-service/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/notification-service:latest
-
+      # Step 6: Tear down after tests
+      - name: Shutdown Docker Compose
+        run: docker-compose down
