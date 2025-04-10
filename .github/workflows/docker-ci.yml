@@ -24,16 +24,16 @@ jobs:
 
       - name: Build and push user service Docker image
         run: |
-          docker buildx build --file soa-project/SOA-Project/services/user-service/Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/user-service:latest --push .
+          docker buildx build --file soa-project/SOA-Project/services/user-service --tag ${{ secrets.DOCKER_USERNAME }}/user-service:latest --push .
 
       - name: Build and push restaurant service Docker image
         run: |
-          docker buildx build --file soa-project/SOA-Project/services/restaurant-service/Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/restaurant-service:latest --push .
+          docker buildx build --file soa-project/SOA-Project/services/restaurant-service --tag ${{ secrets.DOCKER_USERNAME }}/restaurant-service:latest --push .
 
       - name: Build and push product service Docker image
         run: |
-          docker buildx build --file soa-project/SOA-Project/services/product-service/Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/product-service:latest --push .
+          docker buildx build --file soa-project/SOA-Project/services/product-service --tag ${{ secrets.DOCKER_USERNAME }}/product-service:latest --push .
 
       - name: Build and push notification service Docker image
         run: |
-          docker buildx build --file soa-project/SOA-Project/services/notification-service/Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/notification-service:latest --push .
+          docker buildx build --file soa-project/SOA-Project/services/notification-service --tag ${{ secrets.DOCKER_USERNAME }}/notification-service:latest --push .
