@@ -20,20 +20,20 @@ jobs:
 
       - name: Install dependencies for user service
         run: |
-          cd services/user-service
+          cd SOA-Project/services/user-service
           pip install -r requirements.txt
 
       - name: Install dependencies for restaurant service
         run: |
-          cd services/restaurant-service
+          cd SOA-Project/services/restaurant-service
           pip install -r requirements.txt
 
       - name: Install dependencies for product service
         run: |
-          cd services/product-service
+          cd SOA-Project/services/product-service
           pip install -r requirements.txt
 
       - name: Install dependencies for notification service
         run: |
-          cd services/notification-service
+          cd SOA-Project/services/notification-service
           pip install -r requirements.txt
