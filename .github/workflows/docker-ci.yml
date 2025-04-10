@@ -13,6 +13,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: List repository structure (debugging)
+        run: |
+          echo "Listing the repository structure:"
+          ls -R
+
       - name: Install dependencies for user service
         run: |
           cd services/user-service
