@@ -28,7 +28,10 @@ jobs:
 
       # Step 3: Set up Docker Compose
       - name: Set up Docker Compose
-        uses: docker/setup-qemu-action@v2
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose --version  # Verify the installation
 
       # Step 4: Build and run with Docker Compose
       - name: Build and run with Docker Compose
@@ -37,13 +40,11 @@ jobs:
           docker-compose up -d
 
       # Step 5: Run tests (if applicable)
-      # You can add steps to run tests, for example, using curl or other commands to check if services are running
-
-      # Example: Testing if the user-service is running
+      # Example: Test user-service is up
       - name: Test user-service is up
         run: |
           curl --fail http://localhost:5001/health || exit 1
 
-      # Step 6: Tear down after tests
+      # Step 6: Shutdown Docker Compose
       - name: Shutdown Docker Compose
         run: docker-compose down
