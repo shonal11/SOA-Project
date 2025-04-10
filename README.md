@@ -11,7 +11,7 @@ A microservices-based **Online Food Ordering System** built using **Python (Flas
 - **Product Service**: Handles products and tracking.
 - **Notification Service**: Sends email/SMS confirmations (mocked).
 
-All services communicate via REST APIs and use **Consul for service discovery**.
+All services communicate via REST APIs and use **Consul for service discovery**. 
 
 ---
 
