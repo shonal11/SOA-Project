@@ -1,44 +1,55 @@
-
-name: CI/CD Pipeline
+name: Build and Push Microservices
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository code
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Set up Docker (this can be removed if not using Docker)
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-      # Skip Docker build and push step for now
-      # - name: Build and push Docker image for User Service
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     context: ./services/user-service
-      #     file: ./services/user-service/Dockerfile
-      #     push: true
-      #     tags: ${{ secrets.DOCKER_USERNAME }}/user-service:latest
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Example of other steps in the workflow
-      - name: Run tests
-        run: |
-          # Add your test commands here
-          echo "Running tests..."
-          # pytest or other testing commands
-          
-      # Example for deploying or further actions (modify as needed)
-      - name: Deploy
-        run: |
-          echo "Deploying application..."
+      - name: Build and Push User Service
+        uses: docker/build-push-action@v2
+        with:
+          context: ./services/user-service
+          file: ./services/user-service/Dockerfile
+          push: true
+          tags: srfernandopulle/user-service:latest
+
+      - name: Build and Push Product Service
+        uses: docker/build-push-action@v2
+        with:
+          context: ./services/product-service
+          file: ./services/product-service/Dockerfile
+          push: true
+          tags: srfernandopulle/product-service:latest
+
+      - name: Build and Push Restaurant Service
+        uses: docker/build-push-action@v2
+        with:
+          context: ./services/restaurant-service
+          file: ./services/restaurant-service/Dockerfile
+          push: true
+          tags: srfernandopulle/restaurant-service:latest
+
+      - name: Build and Push Notification Service
+        uses: docker/build-push-action@v2
+        with:
+          context: ./services/notification-service
+          file: ./services/notification-service/Dockerfile
+          push: true
+          tags: srfernandopulle/notification-service:latest
